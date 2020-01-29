@@ -8,6 +8,7 @@ import { typeOrmConfig } from "./config/database.config";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { AdminRoutesModule } from "./modules/adminroutes/adminroutes.module";
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { AdminRoutesModule } from "./modules/adminroutes/adminroutes.module";
     }),
     UserModule,
     AuthModule,
-    AdminRoutesModule
+    AdminRoutesModule,
+    RoleModule
   ],
   controllers: [AppController],
   providers: [AppService]

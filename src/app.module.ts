@@ -7,8 +7,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { typeOrmConfig } from "./config/database.config";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
-import { AdminRoutesModule } from "./modules/adminroutes/adminroutes.module";
-import { RoleModule } from './modules/role/role.module';
+import { RouteModule } from "./modules/route/route.module";
+import { RoleModule } from "./modules/role/role.module";
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { RoleModule } from './modules/role/role.module';
     }),
     UserModule,
     AuthModule,
-    AdminRoutesModule,
+    RouteModule,
     RoleModule
   ],
   controllers: [AppController],

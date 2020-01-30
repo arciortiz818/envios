@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ConfigService } from "@nestjs/config";
-import { AdminRoutesService } from "./modules/adminroutes/adminroutes.service";
+import { RouteService } from "./modules/route/route.service";
 const expressListRoutes = require("../express-list-routes");
 
 async function bootstrap() {
@@ -11,7 +11,7 @@ async function bootstrap() {
 
   const server = app.getHttpServer();
   const router = server._events.request._router;
-  const adminRoutesService = app.get<AdminRoutesService>(AdminRoutesService);
+  const adminRoutesService = app.get<RouteService>(RouteService);
   adminRoutesService.insertRoutes(expressListRoutes(router));
 }
 bootstrap();

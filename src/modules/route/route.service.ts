@@ -1,11 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { AdminRoutesRepository } from "./adminroutes.repository";
 import { Route } from "./route.entity";
-import { DeleteResult } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
-export class AdminRoutesService {
-  constructor(private readonly _adminRoutesRepository: AdminRoutesRepository) {}
+export class RouteService {
+  constructor(
+    @InjectRepository(Route)
+    private readonly _adminRoutesRepository: Repository<Route>
+  ) {}
 
   async insertRoutes(routes) {
     await this.deleteRoutes();

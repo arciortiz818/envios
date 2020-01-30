@@ -1,6 +1,6 @@
 var _ = require("lodash");
-import { AdminRoutesDto } from "./src/modules/adminroutes/dto/adminroutes.dto";
-const routes: AdminRoutesDto[] = [];
+import { RouteDto } from "./src/modules/route/dto/route.dto";
+const routes: RouteDto[] = [];
 
 module.exports = function() {
   _.each(arguments, function(arg) {

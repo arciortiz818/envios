@@ -9,7 +9,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>
-    ) {}
+  ) {}
 
   getUsers() {
     const found = this.userRepository.find();

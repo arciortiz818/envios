@@ -14,7 +14,6 @@ export class RoleService {
 
   async getRoles(): Promise<RoleDto[]> {
     const roles: RoleDto[] = await this._roleRepository.find();
-    console.log(roles);
     return roles;
   }
 

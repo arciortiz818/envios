@@ -18,6 +18,9 @@ export class User extends BaseEntity {
   @Column({ type: "varchar", default: "ACTIVE", length: 8 })
   status: string;
 
+  @Column({ type: "varchar", length: 5 })
+  role: string;
+
   @Column({
     type: "timestamp",
     name: "created_at",

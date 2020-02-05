@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, MiddlewareConsumer } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
@@ -9,6 +9,8 @@ import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { RouteModule } from "./modules/route/route.module";
 import { RoleModule } from "./modules/role/role.module";
+import { JwtModule } from "@nestjs/jwt";
+import { jwtConstants } from "./modules/auth/constants";
 
 @Module({
   imports: [
@@ -22,8 +24,8 @@ import { RoleModule } from "./modules/role/role.module";
     RouteModule,
     RoleModule
   ],
-  controllers: [AppController],
-  providers: [AppService]
+  controllers: [],
+  providers: []
 })
 export class AppModule {
   constructor() {}

@@ -4,12 +4,13 @@ import { AuthService } from "./auth.service";
 import { UserService } from "../user/user.service";
 import { User } from "../user/user.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { JwtService, JwtModule } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { jwtConstants } from "./constants";
+import { AuthRepository } from "./auth.repository";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([AuthRepository]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {
@@ -18,7 +19,7 @@ import { jwtConstants } from "./constants";
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService],
+  providers: [AuthService],
   exports: [AuthService]
 })
 export class AuthModule {}

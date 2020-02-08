@@ -11,17 +11,20 @@ export class RouteService {
   ) {}
 
   async insertRoutes(routes) {
-    await this.deleteRoutes();
-    routes.forEach(element => {
-      const newRoute = new Route();
-      newRoute.method = element.method;
-      newRoute.controller = element.controller;
-      newRoute.path = element.path;
-      newRoute.save();
+    routes.forEach(async element => {
+      const existRoute = await this._adminRoutesRepository.find({
+        where: { path: element.path }
+      });
+      if (!existRoute || existRoute.length == 0) {
+        const newRoute = new Route();
+        newRoute.path = element.path;
+        newRoute.save();
+        console.log(`Ruta nueva insertada: ${element.path}`);
+      }
     });
   }
 
-  private async deleteRoutes(): Promise<DeleteResult> {
-    return await this._adminRoutesRepository.delete({});
-  }
+  // private async deleteRoutes(): Promise<DeleteResult> {
+  //   return await this._adminRoutesRepository.delete({});
+  // }
 }

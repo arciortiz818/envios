@@ -13,8 +13,4 @@ import { jwtConstants } from "../auth/constants";
   controllers: [UserController],
   exports: []
 })
-export class UserModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes("user");
-  }
-}
+export class UserModule {}

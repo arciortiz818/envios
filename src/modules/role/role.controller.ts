@@ -8,26 +8,24 @@ import {
 } from "@nestjs/common";
 import { Role } from "./role.entity";
 import { RoleService } from "./role.service";
-import { RoleDto } from "./dto/role.dto";
-import { CreateRoleDto } from "./dto/create-role.dto";
 
 @Controller("role")
 export class RoleController {
   constructor(private readonly _roleService: RoleService) {}
 
   @Get("/")
-  async getAllRoles(): Promise<RoleDto[]> {
+  async getAllRoles(): Promise<Role[]> {
     return await this._roleService.getRoles();
   }
 
-  @Get("/:role")
-  async getRoleByCodigo(@Param("role") role: string): Promise<Role> {
-    return await this._roleService.getRoleByCodigo(role);
+  @Get("/:id")
+  async getRole(@Param("id") id: number): Promise<Role> {
+    return await this._roleService.getRole(id);
   }
 
   @Post("/save")
-  async addRole(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
-    const newRole = await this._roleService.saveRole(createRoleDto);
+  async addRole(@Body() role: Role): Promise<Role> {
+    const newRole = await this._roleService.saveRole(role);
     if (!newRole) {
       throw new InternalServerErrorException();
     }

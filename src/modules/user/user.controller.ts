@@ -7,8 +7,9 @@ import {
   ParseIntPipe
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/create.user.dto";
 import { UserDto } from "./dto/user.dto";
+import { User } from "./user.entity";
 
 @Controller("user")
 export class UserController {
@@ -16,16 +17,16 @@ export class UserController {
 
   @Get()
   async getUsers(): Promise<UserDto[]> {
-    return await this.userService.getUsers();
+    return await this.userService.getAll();
   }
 
   @Get("/:id")
   async getUserById(@Param("id", ParseIntPipe) id: number): Promise<UserDto> {
-    return await this.userService.getUserById(id);
+    return await this.userService.get(id);
   }
 
   @Post("/save")
-  createUser(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
-    return this.userService.createUser(createUserDto);
+  createUser(@Body() user: User): Promise<any> {
+    return this.userService.create(user);
   }
 }

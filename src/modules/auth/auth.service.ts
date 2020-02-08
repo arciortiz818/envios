@@ -3,64 +3,58 @@ import {
   ConflictException,
   UnauthorizedException
 } from "@nestjs/common";
-import { UserService } from "../user/user.service";
-import { LoginDto } from "./dto/login.dto";
 import { JwtService } from "@nestjs/jwt";
+import { User } from "../user/user.entity";
+import { AuthRepository } from "./auth.repository";
+import * as bcrypt from "bcrypt";
+import { RoleType } from "../role/roletype.enum";
+import { RegisterDto } from "./dto/register.dto";
+import { LoginDto } from "./dto/login.dto";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private readonly _authRepository: AuthRepository,
     private readonly jwtService: JwtService
   ) {}
 
-  // async signUp(signUpDto: SignUpDto): Promise<User> {
-  //   const { username, email, role } = signUpDto;
+  async register(registerDto: RegisterDto): Promise<RegisterDto> {
+    const { username, email } = registerDto;
 
-  //   //Validamos si existe el usuario
-  //   const userExists = await this._authRepository.findOne({
-  //     where: [{ username }, { email }]
-  //   });
-  //   if (userExists) {
-  //     throw new ConflictException(`username or email already exists`);
-  //   }
+    //Validamos si existe el usuario
+    const userExists = await this._authRepository.findOne({
+      where: [{ username }, { email }]
+    });
 
-  //   //Validamos si existe el ROL
-  //   const isRole = await this.validateExistsRole(signUpDto.role);
-  //   if (!isRole) {
-  //     throw new ConflictException(`El Role ${role} no existe.`);
-  //   }
-
-  //   return null; //await this._authRepository.signUp(signUpDto);
-  // }
-
-  // async validateExistsRole(role: string): Promise<boolean> {
-  //   try {
-  //     const roleData = await this.roleRepository.find({ role });
-  //     if (roleData.length > 0) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  async login(loginDto: LoginDto): Promise<any> {
-    const user = await this.userService.loginUser(loginDto);
-
-    if (!user) {
-      throw new UnauthorizedException(`Credenciales incorrectas`);
+    if (userExists) {
+      throw new ConflictException(`username o email already exists`);
     }
 
-    const payload = { id: user.id, username: user.username, role: user.role };
-    const accessToken = await this.jwtService.sign(payload);
-    return {
-      userId: user.id,
+    return await this._authRepository.registerUser(registerDto);
+  }
+
+  async login(loginDto: LoginDto): Promise<any> {
+    const { username, password } = loginDto;
+    const user: User = await this._authRepository.findOne({
+      where: { username }
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(`User does not exists`);
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      throw new UnauthorizedException(`Invalid credentials`);
+    }
+
+    const payload = {
+      id: user.id,
       username: user.username,
-      role: user.role,
-      token: accessToken
+      role: user.role.name
     };
+    const accessToken = await this.jwtService.sign(payload);
+    return { accessToken };
   }
 }

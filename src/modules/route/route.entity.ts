@@ -1,20 +1,13 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-
 @Entity("routes")
 export class Route extends BaseEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
   @Column({ type: "varchar", nullable: false })
-  method: string;
-
-  @Column({ type: "varchar", nullable: false })
-  controller: string;
-
-  @Column({ type: "varchar", nullable: false })
   path: string;
-  
+
   @Column({
     type: "timestamp",
     name: "created_at",

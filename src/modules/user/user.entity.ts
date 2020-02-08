@@ -1,4 +1,11 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne
+} from "typeorm";
+import { Role } from "../role/role.entity";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -17,8 +24,11 @@ export class User extends BaseEntity {
   @Column({ type: "varchar", default: "ACTIVE", length: 8 })
   status: string;
 
-  @Column({ type: "varchar", length: 5 })
-  role: string;
+  @ManyToOne(
+    type => Role,
+    role => role.id
+  )
+  role: Role;
 
   @Column({
     type: "timestamp",

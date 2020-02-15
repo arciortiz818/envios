@@ -7,7 +7,6 @@ const expressListRoutes = require("../express-list-routes");
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const userService = app.get<UserService>(UserService);
 
   const configService = app.get<ConfigService>(ConfigService);
   await app.listen(configService.get("PORT"));

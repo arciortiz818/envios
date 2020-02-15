@@ -6,14 +6,14 @@ import {
   Body,
   InternalServerErrorException
 } from "@nestjs/common";
-import { Role } from "./role.entity";
+import { Role } from "../../database/entities/role.entity";
 import { RoleService } from "./role.service";
 
 @Controller("role")
 export class RoleController {
   constructor(private readonly _roleService: RoleService) {}
 
-  @Get("/")
+  @Get("")
   async getAllRoles(): Promise<Role[]> {
     return await this._roleService.getRoles();
   }
@@ -23,7 +23,7 @@ export class RoleController {
     return await this._roleService.getRole(id);
   }
 
-  @Post("/save")
+  @Post("")
   async addRole(@Body() role: Role): Promise<Role> {
     const newRole = await this._roleService.saveRole(role);
     if (!newRole) {

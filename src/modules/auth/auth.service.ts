@@ -4,10 +4,9 @@ import {
   UnauthorizedException
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { User } from "../user/user.entity";
+import { User } from "../../database/entities/user.entity";
 import { AuthRepository } from "./auth.repository";
 import * as bcrypt from "bcrypt";
-import { RoleType } from "../role/roletype.enum";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 
@@ -52,7 +51,7 @@ export class AuthService {
     const payload = {
       id: user.id,
       username: user.username,
-      role: user.role.name
+      role: user.role
     };
     const accessToken = await this.jwtService.sign(payload);
     return { accessToken };

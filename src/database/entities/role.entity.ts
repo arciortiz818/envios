@@ -3,32 +3,35 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne
+  OneToMany,
+  ManyToMany,
+  JoinColumn,
+  ManyToOne,
+  JoinTable
 } from "typeorm";
-import { Role } from "../role/role.entity";
+import { User } from "./user.entity";
+import { Route } from "./route.entity";
 
-@Entity("users")
-export class User extends BaseEntity {
+@Entity("roles")
+export class Role extends BaseEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column({ type: "varchar", unique: true, length: 25, nullable: false })
-  username: string;
+  @Column({ type: "varchar", length: 20, nullable: false })
+  name: string;
 
   @Column({ type: "varchar", nullable: false })
-  email: string;
-
-  @Column({ type: "varchar", nullable: false })
-  password: string;
+  description: string;
 
   @Column({ type: "varchar", default: "ACTIVE", length: 8 })
   status: string;
 
-  @ManyToOne(
-    type => Role,
-    role => role.id
+  @OneToMany(
+    type => User,
+    user => user.role
   )
-  role: Role;
+  @JoinColumn()
+  users: User[];
 
   @Column({
     type: "timestamp",
@@ -43,7 +46,4 @@ export class User extends BaseEntity {
     default: () => "CURRENT_TIMESTAMP"
   })
   updatedAt: Date;
-
-  @Column({ type: "varchar" })
-  salt: string;
 }

@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer } from "@nestjs/common";
+import { Module, MiddlewareConsumer, RequestMethod } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import configApp from "./config/app.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -10,7 +10,7 @@ import { RoleModule } from "./modules/role/role.module";
 import { AuthMiddleware } from "./modules/auth/auth.middleware";
 import { UserController } from "./modules/user/user.controller";
 import { UserService } from "./modules/user/user.service";
-import { User } from "./modules/user/user.entity";
+import { User } from "./database/entities/user.entity";
 import { AuthController } from "./modules/auth/auth.controller";
 
 @Module({
@@ -32,7 +32,13 @@ import { AuthController } from "./modules/auth/auth.controller";
 export class AppModule {
   constructor() {}
 
-  // public configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(AuthMiddleware).forRoutes(UserController, AuthController);
-  // }
+  public configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        { path: "auth/register", method: RequestMethod.POST },
+        { path: "auth/login", method: RequestMethod.POST }
+      )
+      .forRoutes(UserController, AuthController);
+  }
 }

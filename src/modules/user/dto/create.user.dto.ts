@@ -1,4 +1,4 @@
-import { Role } from "src/modules/role/role.entity";
+import { Role } from "src/database/entities/role.entity";
 
 export class CreateUserDto {
   username: string;

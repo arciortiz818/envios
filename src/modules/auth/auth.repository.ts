@@ -1,7 +1,7 @@
 import { EntityRepository, Repository, getConnection } from "typeorm";
-import { User } from "../user/user.entity";
+import { User } from "../../database/entities/user.entity";
 import * as bcrypt from "bcrypt";
-import { Role } from "../role/role.entity";
+import { Role } from "../../database/entities/role.entity";
 import { RoleType } from "../role/roletype.enum";
 import { RegisterDto } from "./dto/register.dto";
 
@@ -20,9 +20,7 @@ export class AuthRepository extends Repository<User> {
     const roleRepository = await getConnection().getRepository(Role);
     let defaultRole: Role;
     if (role) {
-      defaultRole = await roleRepository.findOne({
-        where: { name: role.name }
-      });
+      defaultRole = await roleRepository.findOne(role);
     } else {
       defaultRole = await roleRepository.findOne({
         where: { name: RoleType.USER }

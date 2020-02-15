@@ -3,30 +3,37 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  JoinColumn
 } from "typeorm";
-import { User } from "../user/user.entity";
+import { Role } from "./role.entity";
 
-@Entity("roles")
-export class Role extends BaseEntity {
+@Entity("users")
+export class User extends BaseEntity {
+  [x: string]: unknown;
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column({ type: "varchar", length: 20, nullable: false })
-  name: string;
+  @Column({ type: "varchar", unique: true, length: 25, nullable: false })
+  username: string;
 
   @Column({ type: "varchar", nullable: false })
-  description: string;
+  email: string;
+
+  @Column({ type: "varchar", nullable: false })
+  password: string;
 
   @Column({ type: "varchar", default: "ACTIVE", length: 8 })
   status: string;
 
-  @OneToMany(
-    type => User,
-    user => user.role,
-    { cascade: true }
-  )
-  user: User;
+  @Column({ type: "varchar" })
+  salt: string;
+
+  @ManyToOne(type => Role, role => role.users)
+  @JoinColumn()
+  role: Role;
 
   @Column({
     type: "timestamp",
